@@ -47,10 +47,10 @@ def main(args):
     score_dir = args.dir
 
     test_csv_dir = os.path.join(score_dir, "Test_seed_0.csv")
-    predict_csv_dir = os.path.join(score_dir, "Predict_seed_0.csv")
+    # predict_csv_dir = os.path.join(score_dir, "Predict_seed_0.csv")
 
     test_df = pd.read_csv(test_csv_dir)
-    predict_df = pd.read_csv(predict_csv_dir)
+    # predict_df = pd.read_csv(predict_csv_dir)
 
 
     prediction = test_df['Predicted Label'].tolist()
@@ -58,7 +58,7 @@ def main(args):
             
     
     confusion_matrix = metrics.confusion_matrix(label, prediction)
-    target_names = ['AMD','Cataract','DR','Glaucoma','Myopia','Normal']
+    target_names = ["amd", "dr", "mf", "nd"]
     per_classes_acc = {name: accuracy_score(np.array(label) == i, np.array(prediction) == i) for i, name in enumerate(target_names)}
     # Extract true positives, false positives, true negatives, and false negatives
 
@@ -69,16 +69,16 @@ def main(args):
     for key,value in per_classes_acc.items():
         total_acc += value
 
-    print(f"\nAverage accuracy: {total_acc/6:.4f}")
-    per_classes_acc['average_accuracy'] = total_acc/6
-    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["AMD", "Cataract", "DR", "Glaucoma", "Myopia", "Normal"])
+    print(f"\nAverage accuracy: {total_acc/4:.4f}")
+    per_classes_acc['average_accuracy'] = total_acc/4
+    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = target_names)
 
     cm_display.plot(cmap=plt.cm.Blues)
     plt.title(f"Test")
     plt.savefig(f'{os.path.join(score_dir, score_dir.split("/")[-1])}_test.pdf')
     # plt.show() 
 
-    confusion_matrix = multilabel_confusion_matrix(y_true=label, y_pred=prediction,labels=[i for i in range(6)])
+    confusion_matrix = multilabel_confusion_matrix(y_true=label, y_pred=prediction,labels=[i for i in range(len(target_names))])
     acc, sensitivity, specificity, precision, G, F1, mcc = misc_measures(confusion_matrix)
     print('Sklearn Metrics -\n Acc: {:.4f}\n F1-score: {:.4f}\n MCC: {:.4f}\n Sensitivity: {:.4f}\n Specificity: {:.4f}\n Precision: {:.4f}\n G: {:.4f}\n'.format(acc, F1, mcc, sensitivity, specificity, precision, G))
 
@@ -101,16 +101,16 @@ def main(args):
     nv_df.to_csv(f"{score_dir}/metrics.csv")
 
 
-    predicted_labels = predict_df['Predicted Label'].tolist()
-    true_labels = [2 for i in range(len(predicted_labels))]
-    # Map true labels: 2 as correct (1) and others as incorrect (0)
-    # Calculate confusion matrix for multi-class classification
-    confusion_matrix = metrics.confusion_matrix(true_labels, predicted_labels, labels=[0,1,2,3,4,5])
-    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["AMD", "Cataract", "DR", "Glaucoma", "Myopia", "Normal"])
+    # predicted_labels = predict_df['Predicted Label'].tolist()
+    # true_labels = [2 for i in range(len(predicted_labels))]
+    # # Map true labels: 2 as correct (1) and others as incorrect (0)
+    # # Calculate confusion matrix for multi-class classification
+    # confusion_matrix = metrics.confusion_matrix(true_labels, predicted_labels, labels=[0,1,2,3,4,5])
+    # cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["AMD", "Cataract", "DR", "Glaucoma", "Myopia", "Normal"])
 
-    cm_display.plot(cmap=plt.cm.Blues)
-    plt.title(f'Predict')
-    plt.savefig(f'{os.path.join(score_dir, score_dir.split("/")[-1])}_predict.pdf')
+    # cm_display.plot(cmap=plt.cm.Blues)
+    # plt.title(f'Predict')
+    # plt.savefig(f'{os.path.join(score_dir, score_dir.split("/")[-1])}_predict.pdf')
 
 
 

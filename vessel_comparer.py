@@ -20,20 +20,27 @@ def load_binary_image(path):
         raise FileNotFoundError(f"Image not found: {path}")
     return (img > 0).astype(np.uint8)
 
+
 def extract_id(filename):
-    match = re.search(r"__(\d+)_", filename)
+    filename = os.path.basename(filename)
+    # print(f"Filename inside extract_id: {filename}")
+    match = re.search(r"^A_\d+_P_\d+_(.+)_Normal_\d+\.png$", filename)
+    # print(f"Regex match: {match}")
     return match.group(1) if match else None
 
 def match_files_by_id(dr_paths, normal_paths):
     normal_map = {extract_id(path): path for path in normal_paths}
+    # print(normal_map)
     matched_pairs = []
 
     for dr_path in dr_paths:
-        dr_id = extract_id(dr_path)
+        dr_id = os.path.splitext(os.path.basename(dr_path))[0]
+        # print(f"DR ID:{dr_id}")
         if dr_id in normal_map:
             matched_pairs.append((dr_path, normal_map[dr_id]))
         else:
             print(f"No match found for DR image: {dr_path}")
+        
     return matched_pairs
 
 def compare_all(normal_dir, dr_dir, cohort_dir):
@@ -108,8 +115,8 @@ def compare_all(normal_dir, dr_dir, cohort_dir):
   
 
 if __name__ == "__main__":
-    dr_image_path = "/home/ahmad/ahmad_experiments/retinal_cond_diff/vessel_segmentations/DR/raw_binary"
-    normal_image_path = "/home/ahmad/ahmad_experiments/retinal_cond_diff/vessel_segmentations/Normal_counterfactual/raw_binary"
-    cohort_directory = "/home/ahmad/ahmad_experiments/retinal_cond_diff/vessel_segmentations/Normal_Cohort/raw_binary"
+    dr_image_path = "/home/ahmad/ahmad_experiments/retinal_cond_diff/vessel_segmentations/Glaucoma_vessel_segmentation/resize_binary"
+    normal_image_path = "/home/ahmad/ahmad_experiments/retinal_cond_diff/vessel_segmentations/Glaucoma_Normal_Counterfactual_vessel_segmentation/resize_binary"
+    cohort_directory = "/home/ahmad/ahmad_experiments/retinal_cond_diff/vessel_segmentations/Normal_Cohort/resize_binary"
 
-    results = compare_all(dr_image_path, normal_image_path, cohort_directory)
+    results = compare_all(normal_image_path, dr_image_path, cohort_directory)

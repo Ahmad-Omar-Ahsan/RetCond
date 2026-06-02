@@ -1,4 +1,4 @@
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch.nn.functional as F
 import torch.nn as nn
 import torchmetrics
@@ -8,6 +8,7 @@ import numpy as np
 import pickle
 import pandas as pd
 from torchvision import models
+import time
 
 
 class EfficientNet_B3(pl.LightningModule):
@@ -258,6 +259,14 @@ class EfficientNet_B0(pl.LightningModule):
         df.to_csv(
             f"{self.config['exp']['csv_dir']}/Test_seed_{self.seed}.csv", index=False
         )
+    def on_test_start(self):
+        self.start_time = time.time()
+        
+    def on_test_end(self):
+        end_time = time.time()
+        print(f"Total testing time: {end_time - self.start_time:.2f} seconds")
+        # Optional: log to your experiment tracker
+        # self.log("total_test_time", end_time - self.start_time)
 
     def predict_step(self, batch, batch_idx):
         images = batch
@@ -337,6 +346,15 @@ class Swin_B(pl.LightningModule):
         self.save_hyperparameters()
         self.csv_information = []
         self.target_names = self.config["hparams"]["target_names"]
+
+    def on_test_start(self):
+        self.start_time = time.time()
+        
+    def on_test_end(self):
+        end_time = time.time()
+        print(f"Total testing time: {end_time - self.start_time:.2f} seconds")
+        # Optional: log to your experiment tracker
+        # self.log("total_test_time", end_time - self.start_time)
 
     def training_step(self, batch, batch_idx, dataloader_idx=0):
         images, labels = batch
@@ -448,7 +466,7 @@ class Swin_B(pl.LightningModule):
         }
 
 
-class Restnet_50(pl.LightningModule):
+class Resnet_50(pl.LightningModule):
     def __init__(self, config):
 
         super().__init__()
@@ -484,6 +502,15 @@ class Restnet_50(pl.LightningModule):
         self.target_names = self.config["hparams"]["target_names"]
         self.save_hyperparameters()
         self.csv_information = []
+
+    def on_test_start(self):
+        self.start_time = time.time()
+        
+    def on_test_end(self):
+        end_time = time.time()
+        print(f"Total testing time: {end_time - self.start_time:.2f} seconds")
+        # Optional: log to your experiment tracker
+        # self.log("total_test_time", end_time - self.start_time)
 
     def training_step(self, batch, batch_idx, dataloader_idx=0):
 

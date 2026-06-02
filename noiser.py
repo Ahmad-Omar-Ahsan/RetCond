@@ -25,12 +25,14 @@ def main():
     transform =transforms.Compose([transforms.ToTensor()])
     image = transform(sample)
     filename = (img_path.split('/')[-1]).replace(".png","")
-    timesteps =[100,200,300,400, 500, 600,700, 800,900, 1000]
+    # timesteps =[100,200,300,400, 500, 600,700, 800,900, 1000]
+    # timesteps = [i for i in range(0, 1000)]
+    timesteps = [0]
 
     scheduler_DDPM = DDPMScheduler(
         num_train_timesteps=config['hparams']['num_train_timesteps']
     )
-    noisy_samples = [image]
+    noisy_samples = []
     noise = torch.randn((image.shape[0], image.shape[1], image.shape[2]), device=image.device)
     for i in timesteps:
         t = torch.tensor(i-1, dtype=torch.long, device=image.device)
@@ -38,8 +40,9 @@ def main():
         noisy_samples.append(noised_image)
     
     concatenated_image = torch.stack(noisy_samples, dim=0)
-    image = torch.unsqueeze(image, dim=0)
-    grids = torch.concat((image, concatenated_image),dim=0)
+    # image = torch.unsqueeze(image, dim=0)
+    # grids = torch.concat((image, concatenated_image),dim=0)
+    grids = concatenated_image
     print(grids.shape)
     grid = make_grid(grids)
     os.makedirs(config['exp']['noised_img_dir'],exist_ok=True)

@@ -89,7 +89,7 @@ def main(args):
 
         journal_data_test = {}
         for filepath, values in pkl_1000_trial.items():
-            filepath = filepath.replace("/home/ahmad99/projects/def-mwilms/ahmad99/", "/home/ahmad/ahmad_experiments/retinal_data/")
+            # filepath = filepath.replace("/work/wilms_lab/ahmad", "/home/ahmad/ahmad_experiments/retinal_data")
             # print(filepath)
             journal_data_test[filepath] = values
 
@@ -113,7 +113,7 @@ def main(args):
             voting_predicted_labels.append(most_common)
 
         confusion_matrix = metrics.confusion_matrix(label, prediction)
-        target_names = ["amd", "dr", "mf", "nd"]
+        target_names = ["amd","cataract", "dr", "glaucoma","myopia", "normal"]
         per_classes_acc = {name: accuracy_score(np.array(label) == i, np.array(prediction) == i) for i, name in enumerate(target_names)}
         
 
@@ -129,13 +129,13 @@ def main(args):
         print(f"\nAverage accuracy: {total_acc/len(target_names):.4f}")
         per_classes_acc['Average Accuracy'] = total_acc/len(target_names)
 
-        cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["amd", "dr", "mf", "nd"])
+        cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = target_names)
 
         cm_display.plot(cmap=plt.cm.Blues)
         plt.title(f'Test')
         plt.savefig(f'{os.path.join(score_dir, score_dir.split("/")[-1])}_test.pdf')
 
-        confusion_matrix = multilabel_confusion_matrix(y_true=label, y_pred=prediction,labels=[i for i in range(4)])
+        confusion_matrix = multilabel_confusion_matrix(y_true=label, y_pred=prediction,labels=[i for i in range(len(target_names))])
         acc, sensitivity, specificity, precision, G, F1, mcc = misc_measures(confusion_matrix)
         print('Sklearn Metrics -\n Acc: {:.4f}\n F1-score: {:.4f}\n MCC: {:.4f}\n Sensitivity: {:.4f}\n Specificity: {:.4f}\n Precision: {:.4f}\n G: {:.4f}\n'.format(acc, F1, mcc, sensitivity, specificity, precision, G))
 
@@ -160,7 +160,7 @@ def main(args):
         # V Test
         print(f"Voting Test\n")
         confusion_matrix = metrics.confusion_matrix(label, voting_predicted_labels)
-        target_names = ["amd", "dr", "mf", "nd"]
+        
         voting_per_classes_acc = {name: accuracy_score(np.array(label) == i, np.array(voting_predicted_labels) == i) for i, name in enumerate(target_names)}
         
 
@@ -173,13 +173,13 @@ def main(args):
 
         print(f"\nAverage accuracy: {voting_total_acc/len(target_names):.4f}")
         voting_per_classes_acc['Average Accuracy'] = voting_total_acc/len(target_names)
-        cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["amd", "dr", "mf", "nd"])
+        cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = target_names)
 
         cm_display.plot(cmap=plt.cm.Blues)
         plt.title(f'Test (Voting scheme)')
         plt.savefig(f'{os.path.join(score_dir, score_dir.split("/")[-1])}_test_voting.pdf')
 
-        confusion_matrix = multilabel_confusion_matrix(y_true=label, y_pred=voting_predicted_labels,labels=[i for i in range(4)])
+        confusion_matrix = multilabel_confusion_matrix(y_true=label, y_pred=voting_predicted_labels,labels=[i for i in range(len(target_names))])
         acc, sensitivity, specificity, precision, G, F1, mcc = misc_measures(confusion_matrix)
         print('Sklearn Metrics -\n Acc: {:.4f}\n F1-score: {:.4f}\n MCC: {:.4f}\n Sensitivity: {:.4f}\n Specificity: {:.4f}\n Precision: {:.4f}\n G: {:.4f}\n'.format(acc, F1, mcc, sensitivity, specificity, precision, G))
 
@@ -217,7 +217,7 @@ def main(args):
             
             modified_pickle_file = {}
             for filepath, values in pkl_file.items():
-                filepath = filepath.replace("/work/wilms_lab/ahmad/BRSET_DR_Normal/", "/home/ahmad99/projects/def-mwilms/ahmad99/BRSET_DR_Normal/")
+                # filepath = filepath.replace("/work/wilms_lab/ahmad/BRSET_DR_Normal/", "/home/ahmad99/projects/def-mwilms/ahmad99/BRSET_DR_Normal/")
                 # print(filepath)
                 modified_pickle_file[filepath] = values
             predict_pkls.append(modified_pickle_file)

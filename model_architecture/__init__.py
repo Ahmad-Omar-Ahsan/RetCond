@@ -1,6 +1,5 @@
 from model_architecture.DDPM_PL import LightningDDPM_monai, set_timesteps_without_ratio, Pretrained_LightningDDPM_monai
 from model_architecture.DDIM_PL import LightningDDIM_monai, Conditional_DDIM_monai
-from model_architecture.DDPM_DDIM_PL import LightningDDPMDDIM_monai
 from model_architecture.Custom_Inferer import FlexibleConditionalDiffusionInferer
 from model_architecture.Simple_mlp import MLP_classifier
-from model_architecture.discriminative import EfficientNet_B3, Swin_B, EfficientNet_B0, Restnet_50
+from model_architecture.discriminative import EfficientNet_B3, Swin_B, EfficientNet_B0, Resnet_50
