@@ -46,12 +46,16 @@ All hyperparameters and paths are configured in YAML files (e.g., `conf.yaml`). 
 - `data_dir`: Path to training data
 - `ckpt_dir`: Directory to save model checkpoints
 - `logdir`: TensorBoard logs directory (default: `logs/`)
-- `csv_dir`: Directory for output CSV results
+- `csv_dir`: Directory for output test results
 - `model_ckpt_path`: Path to load checkpoint from (for continue training)
 - `device`: `auto` or specific GPU IDs
 - `accelerator`: `auto`, `gpu`, or `cpu`
 - `num_workers`: Number of data loading workers
-- Other paths: `pickle_dir`, `sample_image_dir`, `counterfactual_dir`, `predict_dir`
+- `counterfactual_dir`: Output for counterfactual images
+- `predict_dir`: Directory for images for prediction (different from ImageFolder/Test)
+- `sample_image_dir`:  Directory for generated sampled images
+- `pickle_dir`: Director for pickle files (outdated)
+
 
 ### `hparams` section (Hyperparameters)
 - `batch_size`: Training batch size (default: 64)
