@@ -1,4 +1,12 @@
+<div align="center">
+
 # RetCond: A Conditional Diffusion Model for Self-Explanatory Multi-Class Fundus Image Classification
+
+</div>
+This repository contains the code associtaed with the paper:
+> O Ahsan, A., Nielsen, C., Souza, R., Aulakh, A., D Forkert, N., & Wilms, M. (2026). RetCond: A Conditional Diffusion Model for Self-Explanatory Multi-Class Fundus Image Classification. Journal of Medical Systems, 50(1), 84.
+
+[[Link to paper]](https://link.springer.com/article/10.1007/s10916-026-02414-0)
 
 ## Setup Environment
 
@@ -319,3 +327,22 @@ See `sample_config/` directory for example configurations for different training
 - Fine-tuning from pretrained models
 - Evaluation/testing
 - Prediction on new data
+
+
+## Citation
+
+If you would like to use our code or paper for your work please cite us.
+
+```
+@article{o2026retcond,
+  title={RetCond: A Conditional Diffusion Model for Self-Explanatory Multi-Class Fundus Image Classification},
+  author={O Ahsan, Ahmad and Nielsen, Christopher and Souza, Raissa and Aulakh, Agampreet and D Forkert, Nils and Wilms, Matthias},
+  journal={Journal of Medical Systems},
+  volume={50},
+  number={1},
+  pages={84},
+  year={2026},
+  publisher={Springer}
+}
+
+```
